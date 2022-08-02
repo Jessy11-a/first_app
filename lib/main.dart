@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme:  ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.green,
         accentColor: Colors.deepPurple,
       ),
       
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('EasyList'),
         ),
-        body: ProductManager('Food Tester'), 
+        body: ProductManager(startingProduct: 'Food Tester'), 
       ),
     );
   }
