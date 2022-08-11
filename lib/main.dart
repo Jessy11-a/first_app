@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Pages/products.dart';
+import 'Pages/product.dart';
 import 'Pages/auth.dart';
 
 void main() {
