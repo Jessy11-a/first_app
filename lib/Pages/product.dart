@@ -23,8 +23,8 @@ class ProductPage extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(10.0),
             child: ElevatedButton(
-              child: Text('Back'),
-              onPressed: () => Navigator.pop(context),
+              child: Text('Delete'),
+              onPressed: () => Navigator.pop(context, true),
             ),
           )
         ],
