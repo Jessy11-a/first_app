@@ -36,32 +36,36 @@ class _MyAppState extends State<MyApp> {
     var onGenerateRoute;
 
     return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.green,
-        accentColor: Colors.deepPurple,
-      ),
-      //home: AuthPage(),
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.green,
+          accentColor: Colors.deepPurple,
+        ),
+        //home: AuthPage(),
 
-      routes: {
-        '/': (BuildContext context) =>
-            ProductsPage(_products, _addProduct, _deleteProduct),
-        '/admin': (BuildContext context) => AdminProducts(),
-      },
-      onGenerateRoute: (RouteSettings settings) {
-        final List<String> pathElements = settings.name!.split('/');
-        if (pathElements[0] != '') {
+        routes: {
+          '/': (BuildContext context) =>
+              ProductsPage(_products, _addProduct, _deleteProduct),
+          '/admin': (BuildContext context) => AdminProducts(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          final List<String> pathElements = settings.name!.split('/');
+          if (pathElements[0] != '') {
+            return null;
+          }
+          if (pathElements[1] == 'product') {
+            final int index = int.parse(pathElements[2]);
+            return MaterialPageRoute<bool>(
+              builder: (BuildContext context) => ProductPage(
+                  _products[index]['title']!, _products[index]['image']!),
+            );
+          }
           return null;
-        }
-        if (pathElements[1] == 'product') {
-          final int index = int.parse(pathElements[2]);
+        },
+        onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => ProductPage(
-                _products[index]['title']!, _products[index]['image']!),
-          );
-        }
-        return null;
-      },
-    );
+              builder: (BuildContext context) =>
+                  ProductsPage(_products, _addProduct, _deleteProduct));
+        });
   }
 }
