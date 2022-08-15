@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
 
         routes: {
           '/': (BuildContext context) =>
-              ProductsPage(_products, _addProduct, _deleteProduct),
-          '/admin': (BuildContext context) => AdminProducts(),
+              ProductsPage(_products),
+          '/admin': (BuildContext context) => AdminProducts(_addProduct, _deleteProduct),
         },
         onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name!.split('/');
