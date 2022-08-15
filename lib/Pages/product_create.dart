@@ -15,6 +15,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String titleValue = '';
   String descriptionValue = '';
   double priceValue = 0.0;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                 'title': titleValue,
                 'description': descriptionValue,
                 'price': priceValue,
+                'image': 'assets/food.jpg',
               };
               widget.addProduct(product);
             },
