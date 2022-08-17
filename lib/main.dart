@@ -41,12 +41,12 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.green,
           accentColor: Colors.deepPurple,
         ),
-        //home: AuthPage(),
+        home: AuthPage(),
 
         routes: {
-          '/':(context) => AuthPage(),
-          //'/': (BuildContext context) =>
-              //ProductsPage(_products),
+          //'/':(context) => AuthPage(),
+          '/products': (BuildContext context) =>
+              ProductsPage(_products),
           '/admin': (BuildContext context) => AdminProducts(_addProduct, _deleteProduct),
         },
         onGenerateRoute: (RouteSettings settings) {
