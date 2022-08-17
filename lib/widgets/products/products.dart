@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './Pages/product.dart';
+import '../../Pages/product.dart';
+import './price_tag.dart';
 
 class Products extends StatelessWidget {
   final List<Map<String, dynamic>> products;
-  
 
   Products(this.products) {
     print('[Products Widget] Constructor');
@@ -17,72 +17,53 @@ class Products extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Image.asset(products[index]['image']!),
-
-                      Container (
+                      Container(
                         padding: EdgeInsets.only(top: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                           Text(
-                            products[index]['title']!,
-                            style: TextStyle(
-                              fontSize: 26.0,
-                              fontWeight: FontWeight.bold,
-                            )
-                            ),
-
+                            Text(products[index]['title']!,
+                                style: TextStyle(
+                                  fontSize: 26.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
                             SizedBox(
                               width: 10.0,
-                              ),
+                            ),
 
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
-                              decoration: BoxDecoration(
-                                color:
-                                Theme.of(context).accentColor,
-                                borderRadius: BorderRadius.circular(5.0)
-                                ),
-                              
-                              child: Text(
-                              '\$${products[index]['price']!.toString()}',
-                              style: TextStyle(color: Colors.white),) 
-                            )
+                            PriceTag(products[index]['price'].toString()),
                           ],
-                          )
-                        
+                        ),
                       ),
-                      
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 2.5),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey, width: 1.0),
                           borderRadius: BorderRadius.circular(6.0),
-                         ),
-                        child: Text('Union Square SanFransisco'),
+                        ),
+                        child: Text('Union Square San Fransisco'),
                       ),
-
-
                       ButtonBar(
                           alignment: MainAxisAlignment.center,
                           children: <Widget>[
                             IconButton(
                               icon: Icon(Icons.info),
                               color: Colors.green,
-                              onPressed: () => Navigator.pushNamed<bool>(context, '/product/' +index.toString()),
+                              onPressed: () => Navigator.pushNamed<bool>(
+                                  context, '/product/' + index.toString()),
                             ),
-
                             IconButton(
                               icon: Icon(Icons.favorite_border),
                               color: Colors.red,
-                              onPressed: () => Navigator.pushNamed<bool>(context, '/product/' +index.toString()),
+                              onPressed: () => Navigator.pushNamed<bool>(
+                                  context, '/product/' + index.toString()),
                             ),
-
                             IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () => Navigator.pushNamed<bool>(context, '/product/' +index.toString()),
+                              icon: Icon(Icons.shopping_cart_outlined),
+                              onPressed: () => Navigator.pushNamed<bool>(
+                                  context, '/product/' + index.toString()),
                             ),
-
-
                           ])
                     ],
                   ),
