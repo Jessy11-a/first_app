@@ -18,6 +18,7 @@ class ProductsPage extends StatelessWidget {
             title: Text('choose'),
           ),
           ListTile(
+            leading: Icon(Icons.edit),
               title: Text('Manage products'),
               onTap: () {
                 Navigator.pushReplacementNamed(context, '/admin');
@@ -26,6 +27,11 @@ class ProductsPage extends StatelessWidget {
       )),
       appBar: AppBar(
         title: Text('EasyList'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.favorite) ,
+            onPressed: (){})
+        ],
       ),
       body:
           ProductManager(products),
