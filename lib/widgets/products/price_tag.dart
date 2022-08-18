@@ -9,12 +9,12 @@ class PriceTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
-        decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.circular(5.0)),
+        //decoration: BoxDecoration(
+          //border: Border.all(color: Colors.grey, width: 1.0),
+            //borderRadius: BorderRadius.circular(5.0)),
         child: Text(
           '\$$price',
-          style: TextStyle(color: Colors.white),
+          
         ));
   }
 }
