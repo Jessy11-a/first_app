@@ -15,6 +15,18 @@ class ProductPage extends StatelessWidget {
   ProductPage(this.product);
   //ProductPage(this.title, this.imageUrl, this.price, this.description);
 
+  _buildRowAddressPrice() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        AddressTag('Paris, Italy'),
+        SizedBox(
+          width: 5.0,
+        ),
+        PriceTag(product['price'].toString()),
+      ]),
+    ]);
+  }
+
   _showWarningDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -59,19 +71,10 @@ class ProductPage extends StatelessWidget {
                   Container(
                       padding: EdgeInsets.all(10.0),
                       child: TitleDefault(product['title'])),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AddressTag('Paris, Italy'),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              PriceTag(product['price'].toString()),
-                            ]),
-                      ]),
+                  
+                  _buildRowAddressPrice(),
+
+                  
                   Text(product['description']),
                   Container(
                     padding: EdgeInsets.all(10.0),

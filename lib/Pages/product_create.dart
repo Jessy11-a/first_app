@@ -16,42 +16,41 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String _descriptionValue = '';
   double _priceValue = 0.0;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      child: ListView(
-        children: <Widget>[
-          TextField(
-              decoration: InputDecoration(labelText: 'Product Title'),
-              onChanged: (String value) {
-                setState(() {
-                  _titleValue = value;
-                });
-              }),
-          TextField(
-              decoration: InputDecoration(labelText: 'Product Description'),
-              maxLines: 4,
-              onChanged: (String value) {
-                setState(() {
-                  _descriptionValue = value;
-                });
-              }),
-          TextField(
-              decoration: InputDecoration(labelText: 'Product Price'),
-              keyboardType: TextInputType.number,
-              onChanged: (String value) {
-                setState(() {
-                  _priceValue = double.parse(value);
-                });
-              }),
-          SizedBox(
-            height: 10.0,
-          ),
-          ElevatedButton( 
-            child: Text('Save'),
-            onPressed: () {
-              final Map<String, dynamic> product = {
+  _buildTitleTextField() {
+    return TextField(
+        decoration: InputDecoration(labelText: 'Product Title'),
+        onChanged: (String value) {
+          setState(() {
+            _titleValue = value;
+          });
+        });
+  }
+
+  _buildDescriptionTextField() {
+    return TextField(
+        decoration: InputDecoration(labelText: 'Product Description'),
+        maxLines: 4,
+        onChanged: (String value) {
+          setState(() {
+            _descriptionValue = value;
+          });
+        });
+  }
+
+  _buildPriceTextField() {
+    return TextField(
+        decoration: InputDecoration(labelText: 'Product Price'),
+        keyboardType: TextInputType.number,
+        onChanged: (String value) {
+          setState(() {
+            _priceValue = double.parse(value);
+          });
+        });
+  }
+
+
+   void _submitForm(){
+     final Map<String, dynamic> product = {
                 'title': _titleValue,
                 'description': _descriptionValue,
                 'price': _priceValue,
@@ -59,7 +58,25 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
               };
               widget.addProduct(product);
               Navigator.pushReplacementNamed(context, '/products');
-            },
+
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: ListView(
+        children: <Widget>[
+
+          _buildTitleTextField(),
+          _buildDescriptionTextField(),
+          _buildPriceTextField(),
+
+          SizedBox(
+            height: 10.0,
+          ),
+          ElevatedButton(
+            child: Text('Save'),
+            onPressed: _submitForm, 
           ),
         ],
       ),

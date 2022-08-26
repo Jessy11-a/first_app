@@ -6,10 +6,8 @@ class ProductsPage extends StatelessWidget {
 
   ProductsPage(this.products);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
+  _buildSideDrawer(BuildContext context){
+    return Drawer( 
           child: Column(
         children: <Widget>[
           AppBar(
@@ -23,7 +21,13 @@ class ProductsPage extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/admin');
               }),
         ],
-      )),
+      ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: _buildSideDrawer(context),
       appBar: AppBar(
         title: Text('EasyList'),
         actions: [IconButton(icon: Icon(Icons.favorite), onPressed: () {})],
