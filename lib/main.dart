@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: Colors.green,
-          accentColor: Colors.deepPurple,
+          accentColor: Colors.deepPurple, 
         ),
         home: AuthPage(),
 
