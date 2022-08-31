@@ -1,15 +1,18 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import './product_create.dart';
+import 'product_edit.dart';
 import './product_list.dart';
 
 // ignore: use_key_in_widget_constructors
 class AdminProducts extends StatelessWidget {
   final Function addProduct;
+  final Function updateProduct;
   final Function deleteProduct;
+  final List<Map<String, dynamic>> products;
 
-  AdminProducts(this.addProduct, this.deleteProduct);
+  AdminProducts(
+      this.addProduct, this.updateProduct, this.deleteProduct, this.products);
 
   _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -30,6 +33,11 @@ class AdminProducts extends StatelessWidget {
     ));
   }
 
+  _addProduct() {
+    int id = products.length > 0 ? products.last['id'] + 1 : 1;
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -47,8 +55,10 @@ class AdminProducts extends StatelessWidget {
             ])),
         body: TabBarView(
           children: [
-            ProductCreatePage(addProduct),
-            ProductListPage(),
+            ProductEditPage(
+              addProduct: addProduct,
+            ),
+            ProductListPage(products, updateProduct),
           ],
         ),
       ),
