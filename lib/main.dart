@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
 
   void _deleteProduct(int index) {
     setState(() {
-      _products.removeAt(index);
+      _products.removeAt(index); 
     });
   }
 
