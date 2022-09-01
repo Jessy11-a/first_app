@@ -4,6 +4,7 @@ import 'Pages/product.dart';
 import 'Pages/auth.dart';
 import './Pages/products.dart';
 import './Pages/admin_products.dart';
+import './models/product.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,15 +18,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> _products = [];
+  List<Product> _products = [];
 
-  void _addProduct(Map<String, dynamic> product) {
+  void _addProduct(Product product) {
     setState(() {
       _products.add(product);
     });
   }
 
-  void _updateProduct(int index, Map<String, dynamic> product) {
+  void _updateProduct(int index, Product product) {
     setState(() {
       _products[index] = product;
     });
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
 
   void _deleteProduct(int index) {
     setState(() {
-      _products.removeAt(index); 
+      _products.removeAt(index);
     });
   }
 
@@ -51,10 +52,10 @@ class _MyAppState extends State<MyApp> {
         routes: {
           //'/':(context) => AuthPage(),
           '/products': (BuildContext context) => ProductsPage(_products),
-          '/admin': (BuildContext context) =>
-              AdminProducts(_addProduct, _updateProduct, _deleteProduct, _products),
+          '/admin': (BuildContext context) => AdminProducts(
+              _addProduct, _updateProduct, _deleteProduct, _products),
         },
-        onGenerateRoute: (RouteSettings settings) {
+        onGenerateRoute: (RouteSettings settings ) {
           final List<String> pathElements = settings.name!.split('/');
           if (pathElements[0] != '') {
             return null;
@@ -62,9 +63,11 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'product') {
             final int index = int.parse(pathElements[2]);
             return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(_products[index]),
+              builder: (BuildContext context) => ProductPage(
+                _products[index]
+                ),
             );
-          }
+          } 
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {

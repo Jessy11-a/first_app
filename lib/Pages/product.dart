@@ -4,16 +4,15 @@ import '../widgets/products/price_tag.dart';
 import '../widgets/products/products.dart';
 import '../widgets/ui_elements/title_default.dart';
 import '../widgets/products/address_tag.dart';
+import '../models/product.dart';
 
 class ProductPage extends StatelessWidget {
-  //final String title;
-  //final String imageUrl;
-  //final double price;
-  //final String description;
+final Product product;
 
-  final Map<String, dynamic> product;
   ProductPage(this.product);
-  //ProductPage(this.title, this.imageUrl, this.price, this.description);
+  
+
+ 
 
   _buildRowAddressPrice() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
@@ -22,7 +21,7 @@ class ProductPage extends StatelessWidget {
         SizedBox(
           width: 5.0,
         ),
-        PriceTag(product['price'].toString()),
+        PriceTag(product.price.toString()),
       ]),
     ]);
   }
@@ -62,20 +61,17 @@ class ProductPage extends StatelessWidget {
         },
         child: Scaffold(
             appBar: AppBar(
-              title: Text(product['title']),
+              title: Text(product.title!),
             ),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(product['image']),
+                  Image.asset(product.image!),
                   Container(
                       padding: EdgeInsets.all(10.0),
-                      child: TitleDefault(product['title'])),
-                  
+                      child: TitleDefault(product.title!)),
                   _buildRowAddressPrice(),
-
-                  
-                  Text(product['description']),
+                  Text(product.description!),
                   Container(
                     padding: EdgeInsets.all(10.0),
                     child: ElevatedButton(

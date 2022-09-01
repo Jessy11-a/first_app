@@ -1,15 +1,14 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'product_edit.dart';
 import './product_list.dart';
+import '../models/product.dart';
 
-// ignore: use_key_in_widget_constructors
+
 class AdminProducts extends StatelessWidget {
   final Function addProduct;
   final Function updateProduct;
   final Function deleteProduct;
-  final List<Map<String, dynamic>> products;
+  final List<Product> products;
 
   AdminProducts(
       this.addProduct, this.updateProduct, this.deleteProduct, this.products);
@@ -33,10 +32,6 @@ class AdminProducts extends StatelessWidget {
     ));
   }
 
-  _addProduct() {
-    int id = products.length > 0 ? products.last['id'] + 1 : 1;
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +41,8 @@ class AdminProducts extends StatelessWidget {
         drawer: _buildSideDrawer(context),
         appBar: AppBar(
             title: Text('Manage products'),
-            bottom: TabBar(tabs: <Widget>[
+            bottom: TabBar(
+              tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.create),
                 text: 'Create Product',
