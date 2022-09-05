@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 import '../../Pages/product.dart';
 import './product_card.dart';
 import '../../models/product.dart';
-
+import '../../scoped-models/products.dart';
 
 class Products extends StatelessWidget {
-  final List<Product> products;
-
-  Products(this.products) {
-    print('[Products Widget] Constructor');
-  }
-
-  Widget _buildProductList() {
+  Widget _buildProductList(List<Product> products) {
     Widget productCards;
     if (products.length > 0) {
       productCards = ListView.builder(
@@ -19,8 +15,10 @@ class Products extends StatelessWidget {
             ProductCard(products[index], index),
         itemCount: products.length,
       );
-    } else {
-      productCards = Container();
+    } else { 
+      productCards = Center(
+        child: Text('No products found, please add some'),
+      );
     }
     return productCards;
   }
@@ -28,6 +26,10 @@ class Products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('[Products Widget ] build()');
-    return _buildProductList();
+    return ScopedModelDescendant<ProductModel>(
+      builder: (context, Widget? child, ProductModel model) {
+        return _buildProductList(model.products);
+      },
+    );
   }
 }

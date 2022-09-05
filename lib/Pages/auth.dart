@@ -66,7 +66,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   _submitForm() {
-    return Navigator.pushReplacementNamed(context, '/admin');
+    return Navigator.pushReplacementNamed(context, '/products');
   }
 
   @override

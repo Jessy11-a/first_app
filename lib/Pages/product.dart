@@ -5,23 +5,30 @@ import '../widgets/products/products.dart';
 import '../widgets/ui_elements/title_default.dart';
 import '../widgets/products/address_tag.dart';
 import '../models/product.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped-models/products.dart';
 
 class ProductPage extends StatelessWidget {
-final Product product;
+  final int productIndex;
 
-  ProductPage(this.product);
-  
+  ProductPage(this.productIndex, [param1]);
 
- 
-
-  _buildRowAddressPrice() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+  _buildRowAddressPrice(double? price) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center, 
+      children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center, children: [
         AddressTag('Paris, Italy'),
         SizedBox(
-          width: 5.0,
+          width: 5.0, 
         ),
-        PriceTag(product.price.toString()),
+        // PriceTag(productIndex.price.toString()),
+
+       Text(
+          '\$' + price.toString(),
+        )
+
       ]),
     ]);
   }
@@ -53,13 +60,14 @@ final Product product;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () {
-          print('Back button pressed');
-          Navigator.pop(context, false);
-          return Future.value(false);
-        },
-        child: Scaffold(
+    return WillPopScope(onWillPop: () {
+      print('Back button pressed');
+      Navigator.pop(context, false);
+      return Future.value(false);
+    }, child: ScopedModelDescendant<ProductModel>(
+      builder: (context, Widget? child, ProductModel model) {
+        final Product product = model.products[productIndex] ;
+        return Scaffold(
             appBar: AppBar(
               title: Text(product.title!),
             ),
@@ -70,7 +78,7 @@ final Product product;
                   Container(
                       padding: EdgeInsets.all(10.0),
                       child: TitleDefault(product.title!)),
-                  _buildRowAddressPrice(),
+                  _buildRowAddressPrice(product.price),
                   Text(product.description!),
                   Container(
                     padding: EdgeInsets.all(10.0),
@@ -79,6 +87,8 @@ final Product product;
                       onPressed: () => _showWarningDialog(context),
                     ),
                   )
-                ])));
+                ]));
+      },
+    ));
   }
 }

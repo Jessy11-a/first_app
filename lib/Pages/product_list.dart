@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './product_edit.dart';
 import '../models/product.dart';
+import '../scoped-models/products.dart';
 
 class ProductListPage extends StatelessWidget {
   final Function updateProduct;
@@ -13,13 +14,11 @@ class ProductListPage extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: () {
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) {
-              return ProductEditPage(
-                  product: products[index],
-                  updateProduct: updateProduct,
-                  productIndex: index);
+              return ProductEditPage();
             },
           ),
         );

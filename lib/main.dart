@@ -5,6 +5,8 @@ import 'Pages/auth.dart';
 import './Pages/products.dart';
 import './Pages/admin_products.dart';
 import './models/product.dart';
+import 'package:scoped_model/scoped_model.dart';
+import './scoped-models/products.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,31 +20,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Product> _products = [];
-
-  void _addProduct(Product product) {
-    setState(() {
-      _products.add(product);
-    });
-  }
-
-  void _updateProduct(int index, Product product) {
-    setState(() {
-      _products[index] = product;
-    });
-  }
-
-  void _deleteProduct(int index) {
-    setState(() {
-      _products.removeAt(index);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var onGenerateRoute;
 
-    return MaterialApp(
+    return ScopedModel<ProductModel>(
+      model: ProductModel(),
+      child:  MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: Colors.green,
@@ -51,11 +35,10 @@ class _MyAppState extends State<MyApp> {
         home: AuthPage(),
         routes: {
           //'/':(context) => AuthPage(),
-          '/products': (BuildContext context) => ProductsPage(_products),
-          '/admin': (BuildContext context) => AdminProducts(
-              _addProduct, _updateProduct, _deleteProduct, _products),
+          '/products': (BuildContext context) => ProductsPage(),
+          '/admin': (BuildContext context) => AdminProducts(),
         },
-        onGenerateRoute: (RouteSettings settings ) {
+        onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name!.split('/');
           if (pathElements[0] != '') {
             return null;
@@ -63,16 +46,17 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'product') {
             final int index = int.parse(pathElements[2]);
             return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(
-                _products[index]
-                ),
+              builder: (BuildContext context) => 
+                ProductPage(index),
             );
-          } 
+          }
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductsPage(_products));
-        });
+              builder: (BuildContext context) => ProductsPage());
+        })
+    );
+   
   }
-}
+} 
