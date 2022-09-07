@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
-import './product_edit.dart';
-import '../models/product.dart';
-import '../scoped-models/products.dart';
+import 'package:scoped_model/scoped_model.dart';
+import './product_edit.dart'; 
+import '../scoped-models/products.dart'; 
 
 class ProductListPage extends StatelessWidget {
-  final Function updateProduct;
-  final Function deleteProduct;
-  final List<Product> products;
-
-  ProductListPage(this.products, this.updateProduct, this.deleteProduct);
-
-  Widget _buildEditButton(BuildContext context, int index) {
+  
+  Widget _buildEditButton(BuildContext context, int index, ProductModel model) {
     return IconButton(
-      icon: Icon(Icons.edit),
-      onPressed: () {
-
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ProductEditPage();
-            },
-          ),
+          icon: Icon(Icons.edit),
+          onPressed: () {
+            model.selectProduct(index);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return ProductEditPage();
+                },
+              ),
+            );
+          },
         );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ScopedModelDescendant<ProductModel>(
+      builder: (context, Widget? child, ProductModel model) {
+        return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(products[index].title! ),
+          key: Key(model.products[index].title),
           onDismissed: (DismissDirection direction) {
             if (direction == DismissDirection.endToStart) {
-              deleteProduct(index);
+              model.selectProduct(index);
+              model.deleteProduct();
             } else {
               print('other swiping');
             }
@@ -44,17 +42,20 @@ class ProductListPage extends StatelessWidget {
             children: [
               ListTile(
                 leading: CircleAvatar(
-                    backgroundImage: AssetImage(products[index].image!)),
-                title: Text(products[index].title!),
-                subtitle: Text('\$${products[index].price.toString()}'),
-                trailing: _buildEditButton(context, index),
+                    backgroundImage: AssetImage(model.products[index].image)),
+                title: Text(model.products[index].title),
+                subtitle: Text('\$${model.products[index].price.toString()}'),
+                trailing: _buildEditButton(context, index, model),
               ),
               Divider()
             ],
           ),
         );
       },
-      itemCount: products.length,
+      itemCount: model.products.length,
     );
+      },
+    );
+    
   }
 }

@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          TitleDefault(product.title!),
+          TitleDefault(product.title),
           SizedBox(
             width: 10.0,
           ),
@@ -54,7 +54,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _buildTitlePriceDrawerContainer(),
-          Image.asset(product.image!),
+          Image.asset(product.image),
           _buildButtonBar(context),
         ],
       ),

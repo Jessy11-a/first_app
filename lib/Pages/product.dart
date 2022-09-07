@@ -69,17 +69,17 @@ class ProductPage extends StatelessWidget {
         final Product product = model.products[productIndex] ;
         return Scaffold(
             appBar: AppBar(
-              title: Text(product.title!),
+              title: Text(product.title),
             ),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(product.image!),
+                  Image.asset(product.image),
                   Container(
                       padding: EdgeInsets.all(10.0),
-                      child: TitleDefault(product.title!)),
+                      child: TitleDefault(product.title)),
                   _buildRowAddressPrice(product.price),
-                  Text(product.description!),
+                  Text(product.description),
                   Container(
                     padding: EdgeInsets.all(10.0),
                     child: ElevatedButton(
