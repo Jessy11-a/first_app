@@ -3,7 +3,7 @@ import './price_tag.dart';
 import '../ui_elements/title_default.dart';
 import '../../models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -35,8 +35,8 @@ class ProductCard extends StatelessWidget {
         onPressed: () => Navigator.pushNamed<bool>(
             context, '/product/' + productIndex.toString()),
       ),
-      ScopedModelDescendant<ProductModel>(
-        builder:(context, Widget? child, ProductModel model){
+      ScopedModelDescendant<MainModel>(
+        builder:(context, Widget? child, MainModel model){
         return IconButton(
         icon: Icon(model.products[productIndex].isFavorite? Icons.favorite:
           Icons.favorite_border),

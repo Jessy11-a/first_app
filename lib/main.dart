@@ -6,7 +6,7 @@ import './Pages/products.dart';
 import './Pages/admin_products.dart';
 import './models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-import './scoped-models/products.dart';
+import './scoped-models/main.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,8 +24,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var onGenerateRoute;
 
-    return ScopedModel<ProductModel>(
-      model: ProductModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child:  MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
