@@ -65,6 +65,7 @@ class ProductCard extends StatelessWidget {
         children: <Widget>[
           _buildTitlePriceDrawerContainer(),
           Image.asset(product.image),
+          Text(product.userEmail),
           _buildButtonBar(context),
         ],
       ),
