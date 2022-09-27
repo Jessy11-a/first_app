@@ -1,30 +1,48 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../models/product.dart';
 import '../models/user.dart';
 
-class ConnectedProductsModel extends Model { 
-   List<Product> _products = [];
-    int? _selProductIndex;
-    late User _authenticatedUser;
-  
+class ConnectedProductsModel extends Model {
+  List<Product> _products = [];
+  int? _selProductIndex;
+  late User _authenticatedUser;
+
   void addProduct(
       String title, String description, String image, double price) {
-    final Product newProduct = Product(
-      title: title,
-      description: description,
-      image: image,
-      price: price,
-      userEmail: _authenticatedUser.email,
-      userId: _authenticatedUser.id
-    );
-    _products.add(newProduct);
-    _selProductIndex = null;
-    notifyListeners();
+    final Map<String, dynamic> productData = {
+      'title': title,
+      'description': description,
+      'image': 'https://cdn.pixabay.com/photo/2014/10/16/13/20/chocolates-491165__340.jpg',
+      'price': price,
+      'userEmail': _authenticatedUser.email,
+      'userId': _authenticatedUser.id,
+    };
+    http
+        .post(
+            Uri.parse(
+                'https://flutter-products11-default-rtdb.firebaseio.com/products.json'),
+            body: json.encode(productData))
+        .then((http.Response response) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final Product newProduct = Product(
+          id: responseData['name'],
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: _authenticatedUser.email,
+          userId: _authenticatedUser.id);
+      _products.add(newProduct);
+      // _selProductIndex = null;
+      notifyListeners();
+    });
   }
 }
 
-class ProductModel extends ConnectedProductsModel  {
- 
+class ProductModel extends ConnectedProductsModel {
   bool _showFavorites = false;
 
   List<Product> get allProducts {
@@ -44,8 +62,14 @@ class ProductModel extends ConnectedProductsModel  {
 
   Product get selectedProduct {
     if (selectedProductIndex == null) {
-      // here is wrong bcos this must return null but leave it for now
-      return null!;
+      return Product(
+          id: '',
+          title: '',
+          description: '',
+          price: 0.0,
+          image: '',
+          userEmail: '',
+          userId: '');
     }
     return _products[selectedProductIndex!];
   }
@@ -54,14 +78,17 @@ class ProductModel extends ConnectedProductsModel  {
     return _showFavorites;
   }
 
-  void updateProduct(String title, String description, String image, double price) {
-     final Product updatedProduct = Product(
+  void updateProduct(
+      String title, String description, String image, double price) {
+    final Product updatedProduct = Product(
+      
       title: title,
       description: description,
       image: image,
       price: price,
       userEmail: selectedProduct.userEmail,
-      userId: selectedProduct.userId,
+      userId: selectedProduct.userId, 
+      id: '',
     );
     _products[selectedProductIndex!] = updatedProduct;
     // _selProductIndex = null;
@@ -74,6 +101,32 @@ class ProductModel extends ConnectedProductsModel  {
     notifyListeners();
   }
 
+  void fetchProducts() {
+    http
+        .get(Uri.parse(
+            'https://flutter-products11-default-rtdb.firebaseio.com/products.json'))
+        .then((http.Response response) {
+      final List<Product> fetchedProductList = [];
+      final Map<String, dynamic> productListData =
+          json.decode(response.body);
+
+      productListData
+          .forEach((String productId, dynamic productData) {
+        final Product product = Product(
+            id: productId,
+            title: productData['title'],
+            description: productData['description'],
+            image: productData['image'],
+            price: productData['price'],
+            userEmail: productData['userEmail'],
+            userId: productData['userId']);
+        fetchedProductList.add(product);
+      });
+      _products = fetchedProductList;
+      notifyListeners(); 
+    });
+  }
+
   void toggleProductFavoriteStatus() {
     final bool isCurrentlyFavorite = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
@@ -82,9 +135,10 @@ class ProductModel extends ConnectedProductsModel  {
         description: selectedProduct.description,
         price: selectedProduct.price,
         image: selectedProduct.image,
-        isFavorite: newFavoriteStatus, 
-        userEmail: '', 
-        userId: '');
+        isFavorite: newFavoriteStatus,
+        userEmail: '',
+        userId: '', 
+        id: '');
     _products[selectedProductIndex!] = updatedProduct;
     // _selProductIndex = null;
     notifyListeners();

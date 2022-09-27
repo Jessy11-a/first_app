@@ -24,39 +24,37 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var onGenerateRoute;
 
+    final MainModel model = MainModel();
     return ScopedModel<MainModel>(
-      model: MainModel(),
-      child:  MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.green,
-          accentColor: Colors.deepPurple,
-        ),
-        home: AuthPage(),
-        routes: {
-          //'/':(context) => AuthPage(),
-          '/products': (BuildContext context) => ProductsPage(),
-          '/admin': (BuildContext context) => AdminProducts(),
-        },
-        onGenerateRoute: (RouteSettings settings) {
-          final List<String> pathElements = settings.name!.split('/');
-          if (pathElements[0] != '') {
-            return null;
-          }
-          if (pathElements[1] == 'product') {
-            final int index = int.parse(pathElements[2]);
-            return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => 
-                ProductPage(index),
-            );
-          }
-          return null;
-        },
-        onUnknownRoute: (RouteSettings settings) {
-          return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductsPage());
-        })
-    );
-   
+        model: model,
+        child: MaterialApp(
+            theme: ThemeData(
+              brightness: Brightness.light,
+              primarySwatch: Colors.blueGrey,
+              accentColor: Colors.deepPurple,
+            ),
+            home: AuthPage(),
+            routes: {
+              //'/':(context) => AuthPage(),
+              '/products': (BuildContext context) => ProductsPage(model),
+              '/admin': (BuildContext context) => AdminProducts(),
+            },
+            onGenerateRoute: (RouteSettings settings) {
+              final List<String> pathElements = settings.name!.split('/');
+              if (pathElements[0] != '') {
+                return null;
+              }
+              if (pathElements[1] == 'product') {
+                final int index = int.parse(pathElements[2]);
+                return MaterialPageRoute<bool>(
+                  builder: (BuildContext context) => ProductPage(index),
+                );
+              }
+              return null;
+            },
+            onUnknownRoute: (RouteSettings settings) {
+              return MaterialPageRoute<bool>(
+                  builder: (BuildContext context) => ProductsPage(model));
+            }));
   }
-} 
+}

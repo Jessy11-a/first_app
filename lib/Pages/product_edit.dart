@@ -84,28 +84,31 @@ class _ProductEditPageState extends State<ProductEditPage> {
             }));
   }
 
-  void _submitForm(Function addProduct, Function updateProduct, Function setSelectedProduct,
+  void _submitForm(
+      Function addProduct, Function updateProduct, Function setSelectedProduct,
       [int? selectedProductIndex]) {
     if (_formKey.currentState!.validate()) {
-      return;
+      //   return;
+      // }
+      _formKey.currentState!.save();
+      if (selectedProductIndex == null) {
+        addProduct(
+          _formData['title'],
+          _formData['description'],
+          _formData['image'],
+          _formData['price'],
+        );
+      } else {
+        updateProduct(
+          _formData['title'],
+          _formData['description'],
+          _formData['image'],
+          _formData['price'],
+        );
+      }
+      Navigator.pushReplacementNamed(context, '/products')
+          .then((_) => setSelectedProduct(null));
     }
-    _formKey.currentState!.save();
-    if (selectedProductIndex == null) {
-      addProduct(
-        _formData['title'],
-        _formData['description'],
-        _formData['image'],
-        _formData['price'],
-      );
-    } else {
-      updateProduct(
-        _formData['title'],
-        _formData['description'],
-        _formData['image'],
-        _formData['price'],
-      );
-    }
-    Navigator.pushReplacementNamed(context, '/products').then((_)=> setSelectedProduct(null));
   }
 
   Widget _buildSubmitButton() {
@@ -113,8 +116,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
       builder: (context, Widget? child, MainModel model) {
         return ElevatedButton(
           child: Text('Save'),
-          onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct,
-              model.selectedProductIndex),
+          onPressed: () => _submitForm(model.addProduct, model.updateProduct,
+              model.selectProduct, model.selectedProductIndex),
         );
       },
     );
@@ -145,31 +148,13 @@ class _ProductEditPageState extends State<ProductEditPage> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return ScopedModelDescendant<MainModel>(
-  //     builder: (context, Widget? child, MainModel model) {
-  //       final Widget pageContent =
-  //           _buildPageContent(context, model.selectedProduct);
-  //       return model.selectedProductIndex == null
-  //           ? pageContent
-  //           : Scaffold(
-  //               appBar: AppBar(
-  //                 title: Text('Edit Product'),
-  //               ),
-  //               body: pageContent,
-  //             );
-  //     },
-  //   );
-  // }
-
- @override
+  @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget? child, MainModel model) {
         final Widget pageContent =
             _buildPageContent(context, model.selectedProduct);
-        return model.selectedProductIndex == null
+        return model.selectedProductIndex == -1
             ? pageContent
             : Scaffold(
                 appBar: AppBar(
@@ -180,6 +165,4 @@ class _ProductEditPageState extends State<ProductEditPage> {
       },
     );
   }
-
-
 }
