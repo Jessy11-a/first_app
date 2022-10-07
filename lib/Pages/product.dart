@@ -14,21 +14,17 @@ class ProductPage extends StatelessWidget {
   ProductPage(this.productIndex, [param1]);
 
   _buildRowAddressPrice(double? price) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center, 
-      children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         AddressTag('Paris, Italy'),
         SizedBox(
-          width: 5.0, 
+          width: 5.0,
         ),
         // PriceTag(productIndex.price.toString()),
 
-       Text(
+        Text(
           '\$' + price.toString(),
         )
-
       ]),
     ]);
   }
@@ -66,15 +62,16 @@ class ProductPage extends StatelessWidget {
       return Future.value(false);
     }, child: ScopedModelDescendant<MainModel>(
       builder: (context, Widget? child, MainModel model) {
-        final Product product = model.allProducts[productIndex] ;
+        final Product product = model.allProducts[productIndex];
         return Scaffold(
             appBar: AppBar(
               title: Text(product.title),
             ),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(product.image),
+            body: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  Image.network(product.image),
                   Container(
                       padding: EdgeInsets.all(10.0),
                       child: TitleDefault(product.title)),
@@ -87,7 +84,7 @@ class ProductPage extends StatelessWidget {
                       onPressed: () => _showWarningDialog(context),
                     ),
                   )
-                ]));
+                ])));
       },
     ));
   }

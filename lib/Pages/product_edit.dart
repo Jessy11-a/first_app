@@ -16,7 +16,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     'title': null,
     'description': null,
     'price': null,
-    'image': 'z',
+    'image': 'https://cdn.pixabay.com/photo/2014/10/16/13/20/chocolates-491165__340.jpg',
   };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
