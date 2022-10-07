@@ -11,7 +11,6 @@ class ConnectedProductsModel extends Model {
   User? _authenticatedUser;
   bool _isLoading = false;
 
-
   void fetchProducts() {
     _isLoading = true;
     notifyListeners();
@@ -20,8 +19,10 @@ class ConnectedProductsModel extends Model {
             'https://flutter-products11-default-rtdb.firebaseio.com/products.json'))
         .then((http.Response response) {
       final List<Product> fetchedProductList = [];
-      final Map<String, dynamic> productListData = json.decode(response.body);
+      final Map<String, dynamic>? productListData = json.decode(response.body); 
+      print(productListData);
       if (productListData == null) {
+        _products = [];
         _isLoading = false;
         notifyListeners();
         return;
@@ -50,7 +51,7 @@ class ConnectedProductsModel extends Model {
     final Map<String, dynamic> productData = {
       'title': title,
       'description': description,
-      'image':image,
+      'image': image,
       'price': price,
       'userEmail': _authenticatedUser!.email,
       'userId': _authenticatedUser!.id,
@@ -136,20 +137,19 @@ class ProductModel extends ConnectedProductsModel {
     notifyListeners();
   }
 
-
   void toggleProductFavoriteStatus() {
     final bool isCurrentlyFavorite = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
     final Product updatedProduct = Product(
-        id: selectedProduct.id,
-        title: selectedProduct.title,
-        description: selectedProduct.description,
-        price: selectedProduct.price,
-        image: selectedProduct.image,
-        userEmail: selectedProduct.userEmail,
-        userId: selectedProduct.userId,
-        isFavorite: newFavoriteStatus,
-        );
+      id: selectedProduct.id,
+      title: selectedProduct.title,
+      description: selectedProduct.description,
+      price: selectedProduct.price,
+      image: selectedProduct.image,
+      userEmail: selectedProduct.userEmail,
+      userId: selectedProduct.userId,
+      isFavorite: newFavoriteStatus,
+    );
     _products[_selProductIndex!] = updatedProduct;
     // _selProductIndex = null;
     notifyListeners();
