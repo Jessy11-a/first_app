@@ -20,13 +20,14 @@ class ConnectedProductsModel extends Model {
         .then((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic>? productListData = json.decode(response.body); 
-      print(productListData);
+
       if (productListData == null) {
         _products = [];
         _isLoading = false;
         notifyListeners();
         return;
       }
+      
       productListData.forEach((String productId, dynamic productData) {
         final Product product = Product(
             id: productId,
