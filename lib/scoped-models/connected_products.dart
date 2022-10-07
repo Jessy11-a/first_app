@@ -17,7 +17,7 @@ class ConnectedProductsModel extends Model {
     notifyListeners();
     http
         .get(Uri.parse(
-            'https://flutter-products-trial-default-rtdb.firebaseio.com/products.json'))
+            'https://flutter-products11-default-rtdb.firebaseio.com/products.json'))
         .then((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
