@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../widgets/products/products.dart';
@@ -33,9 +35,26 @@ class _ProductsPageState extends State<ProductsPage> {
             title: Text('Manage products'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/admin');
-            }),
+            }
+            ),
       ],
-    ));
+    )
+    );
+  }
+
+  _buildProductsList(){
+    return ScopedModelDescendant(
+      builder: (context, Widget? child, MainModel model){
+        Widget content = Center(child: Text('No products found'));
+          if (model.displayedProducts.length > 0 && !model.isLoading){
+            content = Products();
+          }
+          else if(model.isLoading){
+            content = Center(
+              child: CircularProgressIndicator());
+          }
+          return content;
+      });
   }
 
   @override
@@ -58,7 +77,7 @@ class _ProductsPageState extends State<ProductsPage> {
           )
         ],
       ),
-      body: Products(),
+      body: _buildProductsList(),
     );
   }
 }
