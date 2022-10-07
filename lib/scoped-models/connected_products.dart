@@ -127,13 +127,13 @@ class ProductModel extends ConnectedProductsModel {
       userId: selectedProduct.userId,
     );
     _products[_selProductIndex!] = updatedProduct;
-    // _selProductIndex = null;
+    _selProductIndex = null;
     notifyListeners();
   }
 
   void deleteProduct() {
     _products.removeAt(_selProductIndex!);
-    // _selProductIndex = null;
+    _selProductIndex = null;
     notifyListeners();
   }
 
@@ -151,7 +151,7 @@ class ProductModel extends ConnectedProductsModel {
       isFavorite: newFavoriteStatus,
     );
     _products[_selProductIndex!] = updatedProduct;
-    // _selProductIndex = null;
+    _selProductIndex = null;
     notifyListeners();
   }
 
