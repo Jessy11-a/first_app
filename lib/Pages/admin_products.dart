@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 
 import './product_edit.dart';
 import './product_list.dart';
-
+import '../scoped-models/main.dart';
 
 class AdminProducts extends StatelessWidget {
+  final MainModel model;
+
+  AdminProducts(this.model);
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -29,7 +32,6 @@ class AdminProducts extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -38,8 +40,7 @@ class AdminProducts extends StatelessWidget {
         drawer: _buildSideDrawer(context),
         appBar: AppBar(
             title: Text('Manage products'),
-            bottom: TabBar(
-              tabs: <Widget>[
+            bottom: TabBar(tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.create),
                 text: 'Create Product',
@@ -49,7 +50,7 @@ class AdminProducts extends StatelessWidget {
         body: TabBarView(
           children: [
             ProductEditPage(),
-            ProductListPage(),
+            ProductListPage(model),
           ],
         ),
       ),

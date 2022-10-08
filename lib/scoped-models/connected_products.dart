@@ -19,7 +19,7 @@ class ConnectedProductsModel extends Model {
             'https://flutter-products11-default-rtdb.firebaseio.com/products.json'))
         .then((http.Response response) {
       final List<Product> fetchedProductList = [];
-      final Map<String, dynamic>? productListData = json.decode(response.body); 
+      final Map<String, dynamic>? productListData = json.decode(response.body);
 
       if (productListData == null) {
         _products = [];
@@ -27,7 +27,7 @@ class ConnectedProductsModel extends Model {
         notifyListeners();
         return;
       }
-      
+
       productListData.forEach((String productId, dynamic productData) {
         final Product product = Product(
             id: productId,
@@ -118,23 +118,41 @@ class ProductModel extends ConnectedProductsModel {
 
   void updateProduct(
       String title, String description, String image, double price) {
-    final Product updatedProduct = Product(
-      id: selectedProduct.id,
-      title: title,
-      description: description,
-      image: image,
-      price: price,
-      userEmail: selectedProduct.userEmail,
-      userId: selectedProduct.userId,
-    );
-    _products[_selProductIndex!] = updatedProduct;
-    _selProductIndex = null;
+    _isLoading = true;
     notifyListeners();
+    final Map<String, dynamic> updateData = {
+      'title': title,
+      'description': description,
+      'image': image,
+      'price': price,
+      'userEmail': selectedProduct.userEmail,
+      'userId': selectedProduct.userId,
+    };
+
+    http
+        .put(Uri.parse(
+            'https://flutter-products11-default-rtdb.firebaseio.com/products/${selectedProduct.id}.json'),
+            body: json.encode(updateData))
+        .then((http.Response response) {
+      _isLoading = false;
+      final Product updatedProduct = Product(
+        id: selectedProduct.id,
+        title: title,
+        description: description,
+        image: image,
+        price: price,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId,
+      );
+      _products[_selProductIndex!] = updatedProduct;
+      // _selProductIndex = null;
+      notifyListeners();
+    });
   }
 
   void deleteProduct() {
     _products.removeAt(_selProductIndex!);
-    _selProductIndex = null;
+    //  _selProductIndex = null;
     notifyListeners();
   }
 
@@ -152,7 +170,7 @@ class ProductModel extends ConnectedProductsModel {
       isFavorite: newFavoriteStatus,
     );
     _products[_selProductIndex!] = updatedProduct;
-    _selProductIndex = null;
+    // _selProductIndex = null;
     notifyListeners();
   }
 
