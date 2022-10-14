@@ -16,7 +16,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
     'title': null,
     'description': null,
     'price': null,
-    'image': 'https://cdn.pixabay.com/photo/2014/10/16/13/20/chocolates-491165__340.jpg',
+    'image':
+        'https://cdn.pixabay.com/photo/2014/10/16/13/20/chocolates-491165__340.jpg',
   };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -97,28 +98,46 @@ class _ProductEditPageState extends State<ProductEditPage> {
           _formData['description'],
           _formData['image'],
           _formData['price'],
-        ).then((_) => Navigator.pushReplacementNamed(context, '/products')
-          .then((_) => setSelectedProduct(null)));
-      } else {
-        updateProduct(
-          _formData['title'],
-          _formData['description'],
-          _formData['image'],
-          _formData['price'],
-        );
+        ).then((bool success) {
+          if (success) {
+            Navigator.pushReplacementNamed(context, '/products')
+                .then((_) => setSelectedProduct(null));
+          } else {
+            showDialog(
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text('Something went wrong!!'),
+                    content: Text('Please try again'),
+                    actions: <Widget>[
+                      ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop,
+                          child: Text('okay'))
+                    ]);
+              },
+              context: context,
+            );
+          }
+        });
       }
-      
+      ;
+    } else {
+      updateProduct(
+        _formData['title'],
+        _formData['description'],
+        _formData['image'],
+        _formData['price'],
+      );
     }
   }
 
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(
       builder: (context, Widget? child, MainModel model) {
-        return 
-        // model.isLoading 
-        // ? Center(child:CircularProgressIndicator())
-        // : 
-        ElevatedButton(
+        return
+            // model.isLoading
+            // ? Center(child:CircularProgressIndicator())
+            // :
+            ElevatedButton(
           child: Text('Save'),
           onPressed: () => _submitForm(model.addProduct, model.updateProduct,
               model.selectProduct, model.selectedProductIndex),
