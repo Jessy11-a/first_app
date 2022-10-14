@@ -9,10 +9,11 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped-models/main.dart';
 
 class ProductPage extends StatelessWidget {
-  final int productIndex;
+  final Product? product;
 
-  ProductPage(this.productIndex, [param1]);
+  ProductPage(this.product);
 
+  
   _buildRowAddressPrice(double? price) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -60,23 +61,23 @@ class ProductPage extends StatelessWidget {
       print('Back button pressed');
       Navigator.pop(context, false);
       return Future.value(false);
-    }, child: ScopedModelDescendant<MainModel>(
-      builder: (context, Widget? child, MainModel model) {
-        final Product product = model.allProducts[productIndex];
-        return Scaffold(
+    }, child:  Scaffold(
             appBar: AppBar(
-              title: Text(product.title),
+              title: Text(product!.title),
             ),
             body: SingleChildScrollView(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                  Image.network(product.image),
+                  FadeInImage(
+                    placeholder: AssetImage('assets/food.jpg'),
+                    image: NetworkImage(product!.image),
+                  ),
                   Container(
                       padding: EdgeInsets.all(10.0),
-                      child: TitleDefault(product.title)),
-                  _buildRowAddressPrice(product.price),
-                  Text(product.description),
+                      child: TitleDefault(product!.title)),
+                  _buildRowAddressPrice(product!.price),
+                  Text(product!.description),
                   Container(
                     padding: EdgeInsets.all(10.0),
                     child: ElevatedButton(
@@ -84,8 +85,7 @@ class ProductPage extends StatelessWidget {
                       onPressed: () => _showWarningDialog(context),
                     ),
                   )
-                ])));
-      },
-    ));
+                ]))));
+      }
   }
-}
+

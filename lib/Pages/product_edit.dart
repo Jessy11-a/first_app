@@ -91,7 +91,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
       //   return;
       // }
       _formKey.currentState!.save();
-      if (selectedProductIndex == null) {
+      if (selectedProductIndex == -1) {
         addProduct(
           _formData['title'],
           _formData['description'],
