@@ -11,10 +11,10 @@ class ConnectedProductsModel extends Model {
   User? _authenticatedUser;
   bool _isLoading = false;
 
-  void fetchProducts() {
+  Future<Null> fetchProducts() {
     _isLoading = true;
     notifyListeners();
-    http
+    return http
         .get(Uri.parse(
             'https://flutter-products11-default-rtdb.firebaseio.com/products.json'))
         .then((http.Response response) {
@@ -116,7 +116,7 @@ class ProductModel extends ConnectedProductsModel {
     return _showFavorites;
   }
 
-  void updateProduct(
+  Future<Null> updateProduct(
       String title, String description, String image, double price) {
     _isLoading = true;
     notifyListeners();
@@ -129,9 +129,10 @@ class ProductModel extends ConnectedProductsModel {
       'userId': selectedProduct.userId,
     };
 
-    http
-        .put(Uri.parse(
-            'https://flutter-products11-default-rtdb.firebaseio.com/products/${selectedProduct.id}.json'),
+    return http
+        .put(
+            Uri.parse(
+                'https://flutter-products11-default-rtdb.firebaseio.com/products/${selectedProduct.id}.json'),
             body: json.encode(updateData))
         .then((http.Response response) {
       _isLoading = false;
@@ -151,9 +152,18 @@ class ProductModel extends ConnectedProductsModel {
   }
 
   void deleteProduct() {
+    _isLoading = true;
+    final deletedProductId = selectedProduct.id;
     _products.removeAt(_selProductIndex!);
-    //  _selProductIndex = null;
+    _selProductIndex = null;
     notifyListeners();
+    http
+        .delete(Uri.parse(
+            'https://flutter-products11-default-rtdb.firebaseio.com/products/${deletedProductId}.json'))
+        .then((http.Response response) {
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
   void toggleProductFavoriteStatus() {

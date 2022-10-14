@@ -35,26 +35,25 @@ class _ProductsPageState extends State<ProductsPage> {
             title: Text('Manage products'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/admin');
-            }
-            ),
+            }),
       ],
-    )
-    );
+    ));
   }
 
-  _buildProductsList(){
+  _buildProductsList() {
     return ScopedModelDescendant(
-      builder: (context, Widget? child, MainModel model){
-        Widget content = Center(child: Text('No products found'));
-          if (model.displayedProducts.length > 0 && !model.isLoading){
-            content = Products();
-          }
-          else if(model.isLoading){
-            content = Center(
-              child: CircularProgressIndicator());
-          }
-          return content;
-      });
+        builder: (context, Widget? child, MainModel model) {
+      Widget content = Center(child: Text('No products found'));
+      if (model.displayedProducts.length > 0 && !model.isLoading) {
+        content = Products();
+      } else if (model.isLoading) {
+        content = Center(child: CircularProgressIndicator());
+      }
+      return RefreshIndicator(
+        onRefresh: model.fetchProducts,
+        child: content,
+      );
+    });
   }
 
   @override
