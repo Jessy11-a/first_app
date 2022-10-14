@@ -49,6 +49,55 @@ class ConnectedProductsModel extends Model {
       return;
     });
   }
+  
+}
+
+class ProductModel extends ConnectedProductsModel {
+  bool _showFavorites = false;
+
+  List<Product> get allProducts {
+    return List.from(_products);
+  }
+
+  List<Product> get displayedProducts {
+    if (_showFavorites) {
+      return _products.where((Product product) => product.isFavorite).toList();
+    }
+    return List.from(_products);
+  }
+
+  int get selectedProductIndex {
+    return _products.indexWhere((Product product) {
+      return product.id == _selProductId;
+    });
+  }
+
+  String? get selectedProductId {
+    return _selProductId;
+  }
+
+  Product get selectedProduct {
+    if (_selProductId == null) {
+      return Product(
+          id: '',
+          title: '',
+          description: '',
+          price: 0.0,
+          image: '',
+          userEmail: '',
+          userId: '');
+
+      // return null;
+    }
+    return _products.firstWhere((Product product) {
+      return product.id == _selProductId;
+    });
+  }
+
+  bool get displayFavoritesOnly {
+    return _showFavorites;
+  }
+
 
   Future<bool> addProduct(
       String title, String description, String image, double price) async {
@@ -98,53 +147,7 @@ class ConnectedProductsModel extends Model {
     //   return false;
     // });
   }
-}
 
-class ProductModel extends ConnectedProductsModel {
-  bool _showFavorites = false;
-
-  List<Product> get allProducts {
-    return List.from(_products);
-  }
-
-  List<Product> get displayedProducts {
-    if (_showFavorites) {
-      return _products.where((Product product) => product.isFavorite).toList();
-    }
-    return List.from(_products);
-  }
-
-  int get selectedProductIndex {
-    return _products.indexWhere((Product product) {
-      return product.id == _selProductId;
-    });
-  }
-
-  String? get selectedProductId {
-    return _selProductId;
-  }
-
-  Product get selectedProduct {
-    if (_selProductId == null) {
-      return Product(
-          id: '',
-          title: '',
-          description: '',
-          price: 0.0,
-          image: '',
-          userEmail: '',
-          userId: '');
-
-      // return null;
-    }
-    return _products.firstWhere((Product product) {
-      return product.id == _selProductId;
-    });
-  }
-
-  bool get displayFavoritesOnly {
-    return _showFavorites;
-  }
 
   Future<bool> updateProduct(
       String title, String description, String image, double price) {
