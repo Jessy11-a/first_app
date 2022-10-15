@@ -49,7 +49,6 @@ class ConnectedProductsModel extends Model {
       return;
     });
   }
-  
 }
 
 class ProductModel extends ConnectedProductsModel {
@@ -98,7 +97,6 @@ class ProductModel extends ConnectedProductsModel {
     return _showFavorites;
   }
 
-
   Future<bool> addProduct(
       String title, String description, String image, double price) async {
     _isLoading = true;
@@ -112,32 +110,32 @@ class ProductModel extends ConnectedProductsModel {
       'userId': _authenticatedUser!.id,
     };
 
-    try{
-    final http.Response response = await http.post(
-        Uri.parse(
-            'https://flutter-products11-default-rtdb.firebaseio.com/products.json'),
-        body: json.encode(productData));
-    if (response.statusCode != 200 && response.statusCode != 201) {
+    try {
+      final http.Response response = await http.post(
+          Uri.parse(
+              'https://flutter-products11-default-rtdb.firebaseio.com/products.json'),
+          body: json.encode(productData));
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final Product newProduct = Product(
+          id: responseData['name'],
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: _authenticatedUser!.email,
+          userId: _authenticatedUser!.id);
+      _products.add(newProduct);
       _isLoading = false;
       notifyListeners();
-      return false;
-    }
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    final Product newProduct = Product(
-        id: responseData['name'],
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: _authenticatedUser!.email,
-        userId: _authenticatedUser!.id);
-    _products.add(newProduct);
-    _isLoading = false;
-    notifyListeners();
-    return true;
-    }catch(error){
-       _isLoading = false;
+      return true;
+    } catch (error) {
+      _isLoading = false;
       notifyListeners();
       return false;
     }
@@ -147,7 +145,6 @@ class ProductModel extends ConnectedProductsModel {
     //   return false;
     // });
   }
-
 
   Future<bool> updateProduct(
       String title, String description, String image, double price) {
@@ -241,6 +238,21 @@ class ProductModel extends ConnectedProductsModel {
 class UserModel extends ConnectedProductsModel {
   void login(String email, String password) {
     _authenticatedUser = User(id: '123', email: email, password: password);
+  }
+
+  Future<Map<String, dynamic>> signup(String email, String password) async {
+    final Map<String, dynamic> authData = {
+      'email': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+    final http.Response response = await http.post(
+        Uri.parse(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
+        body: json.encode(authData),
+        headers: {'Content-Type': 'application/json'});
+    print(json.decode(response.body));
+    return {'success': true, 'message': 'Authentication succeeded!'};
   }
 }
 
