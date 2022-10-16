@@ -105,11 +105,27 @@ class _AuthPageState extends State<AuthPage> {
     } else {
       final Map<String, dynamic> successInformation =
           await signup(_formData['email'], _formData['password']);
-          if(successInformation['success']){
-            Navigator.pushReplacementNamed(context, '/products');
-          }
+      if (successInformation['success']) {
+        Navigator.pushReplacementNamed(context, '/products');
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('error has occured'),
+                content: successInformation['message'],
+                actions: [
+                  FlatButton(
+                    child: Text('okay'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+      }
     }
-   
   }
 
   @override
@@ -164,7 +180,9 @@ class _AuthPageState extends State<AuthPage> {
                     ),
                     ScopedModelDescendant(
                         builder: (context, Widget? child, MainModel model) {
-                      return ElevatedButton(
+                      return model.isLoading 
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
                         child: Text(
                             _authMode == AuthMode.Login ? 'LOGIN' : 'SIGNUP'),
                         onPressed: () => _submitForm(model.login, model.signup),
