@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
 import '../models/user.dart';
+import '../models/auth.dart';
 
 class ConnectedProductsModel extends Model {
   List<Product> _products = [];
@@ -236,11 +237,8 @@ class ProductModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
-  void login(String email, String password) {
-    _authenticatedUser = User(id: '123', email: email, password: password);
-  }
-
-  Future<Map<String, dynamic>> signup(String email, String password) async {
+  Future<Map<String, dynamic>> authenticate(String email, String password,
+      [AuthMode mode = AuthMode.Login]) async {
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
@@ -248,12 +246,23 @@ class UserModel extends ConnectedProductsModel {
       'password': password,
       'returnSecureToken': true
     };
-    final http.Response response = await http.post(
+
+    http.Response response;
+    if (mode == AuthMode.Login){
+      // The link here should be updated
+    response = await http.post(
+        Uri.parse(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
+        body: json.encode(authData),
+        headers: {'Content-Type': 'application/json'}); 
+    } else{
+       response = await http.post(
         Uri.parse(
             'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
         body: json.encode(authData),
         headers: {'Content-Type': 'application/json'});
-
+    }
+    
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool hasError = true;
     String message = 'Something went wrong';
@@ -262,6 +271,10 @@ class UserModel extends ConnectedProductsModel {
       message = 'Authentication succeeded';
     } else if (responseData['error']['message'] == 'EMAIL_EXISTS') {
       message = 'This email already exists';
+    }else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
+      message = 'This email is not found';
+    } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
+      message = 'The password is invalid';
     }
     _isLoading = false;
     notifyListeners();
