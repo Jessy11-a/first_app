@@ -249,7 +249,6 @@ class UserModel extends ConnectedProductsModel {
 
     http.Response response;
     if (mode == AuthMode.Login){
-      // The link here should be updated
     response = await http.post(
         Uri.parse(
             'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
