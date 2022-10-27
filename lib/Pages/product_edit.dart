@@ -12,6 +12,7 @@ class ProductEditPage extends StatefulWidget {
 }
 
 class _ProductEditPageState extends State<ProductEditPage> {
+  final _descriptionFocusNode = FocusNode();
   final Map<String, dynamic> _formData = {
     'title': null,
     'description': null,
@@ -21,9 +22,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
   };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _titleFocusNode = FocusNode();
-  final _descriptionFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
+  final _titleFocusNode = FocusNode();
 
   _buildTitleTextField(Product product) {
     return EnsureVisibleWhenFocused(
@@ -104,22 +104,22 @@ class _ProductEditPageState extends State<ProductEditPage> {
                 .then((_) => setSelectedProduct(null));
           } else {
             showDialog(
+              context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
                     title: Text('Something went wrong!!'),
                     content: Text('Please try again'),
                     actions: <Widget>[
                       ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop,
+                          onPressed: () => Navigator.of(context).pop(),
                           child: Text('okay'))
                     ]);
               },
-              context: context,
+              
             );
           }
         });
       }
-      ;
     } else {
       updateProduct(
         _formData['title'],
@@ -139,8 +139,11 @@ class _ProductEditPageState extends State<ProductEditPage> {
             // :
             ElevatedButton(
           child: Text('Save'),
-          onPressed: () => _submitForm(model.addProduct, model.updateProduct,
-              model.selectProduct, model.selectedProductIndex),
+          onPressed: () => _submitForm(
+            model.addProduct, 
+            model.updateProduct,
+            model.selectProduct, 
+            model.selectedProductIndex),
         );
       },
     );

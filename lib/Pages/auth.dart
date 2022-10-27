@@ -76,9 +76,6 @@ class _AuthPageState extends State<AuthPage> {
           return 'Password do not match';
         }
       },
-      onSaved: (String? value) {
-        _formData['password'] = value;
-      },
     );
   }
 
