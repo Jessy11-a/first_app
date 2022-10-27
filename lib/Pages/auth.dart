@@ -110,7 +110,7 @@ class _AuthPageState extends State<AuthPage> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('error has occured'),
-              content: successInformation['message'],
+              content: Text(successInformation['message']),
               actions: [
                 FlatButton(
                   child: Text('okay'),

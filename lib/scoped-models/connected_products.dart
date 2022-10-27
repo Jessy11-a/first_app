@@ -251,13 +251,14 @@ class UserModel extends ConnectedProductsModel {
     if (mode == AuthMode.Login){
     response = await http.post(
         Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800',
+            ),
         body: json.encode(authData),
         headers: {'Content-Type': 'application/json'}); 
     } else{
        response = await http.post(
         Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
         body: json.encode(authData),
         headers: {'Content-Type': 'application/json'});
     }
