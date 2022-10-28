@@ -1,3 +1,5 @@
+import 'package:first_app/widgets/ui_elements/alert.dart';
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -12,7 +14,7 @@ class ConnectedProductsModel extends Model {
   User? _authenticatedUser;
   bool _isLoading = false;
 
-  Future<Null> fetchProducts() {
+  Future<Null> fetchProducts(BuildContext context) {
     _isLoading = true;
     notifyListeners();
     return http
@@ -21,6 +23,16 @@ class ConnectedProductsModel extends Model {
         .then<Null>((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic>? productListData = json.decode(response.body);
+
+      // HAPA PATAKUONESHA ALERT KAMA KUKIWA NA ERROR KWEHYE KUFETCH PRODUCT
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        print('Fetch Product');
+        print(response.body);
+        _isLoading = false;
+        showAlertDia('Error in fetching products', productListData!['error'], context);
+        notifyListeners();
+        return;
+      }
 
       if (productListData == null) {
         _products = [];
@@ -98,8 +110,8 @@ class ProductModel extends ConnectedProductsModel {
     return _showFavorites;
   }
 
-  Future<bool> addProduct(
-      String title, String description, String image, double price) async {
+  Future<bool> addProduct(String title, String description, String image,
+      double price) async {
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> productData = {
@@ -107,8 +119,8 @@ class ProductModel extends ConnectedProductsModel {
       'description': description,
       'image': image,
       'price': price,
-      'userEmail': _authenticatedUser!.email,
-      'userId': _authenticatedUser!.id,
+      'userEmail': _authenticatedUser?.email,
+      'userId': _authenticatedUser?.id,
     };
 
     try {
@@ -116,15 +128,18 @@ class ProductModel extends ConnectedProductsModel {
           Uri.parse(
               'https://flutter-products11-default-rtdb.firebaseio.com/products.json'),
           body: json.encode(productData));
+      final Map<String, dynamic>? responseData = json.decode(response.body);
+
       if (response.statusCode != 200 && response.statusCode != 201) {
+        print('Add Product Failed');
+        print("ERROR: " + responseData!['error']);
         _isLoading = false;
         notifyListeners();
         return false;
       }
-      final Map<String, dynamic> responseData = json.decode(response.body);
 
       final Product newProduct = Product(
-          id: responseData['name'],
+          id: responseData!['name'],
           title: title,
           description: description,
           image: image,
@@ -248,21 +263,22 @@ class UserModel extends ConnectedProductsModel {
     };
 
     http.Response response;
-    if (mode == AuthMode.Login){
-    response = await http.post(
-        Uri.parse(
+    if (mode == AuthMode.Login) {
+      response = await http.post(
+          Uri.parse(
             'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800',
-            ),
-        body: json.encode(authData),
-        headers: {'Content-Type': 'application/json'}); 
-    } else{
-       response = await http.post(
-        Uri.parse(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
-        body: json.encode(authData),
-        headers: {'Content-Type': 'application/json'});
+          ),
+          body: json.encode(authData),
+          headers: {'Content-Type': 'application/json'});
+    } else {
+      response = await http.post(
+          Uri.parse(
+              'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBcsW-DresFNvaRzANrd0vYr3PstoMu800'),
+          body: json.encode(authData),
+          headers: {'Content-Type': 'application/json'});
+      print(response.body);
     }
-    
+
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool hasError = true;
     String message = 'Something went wrong';
@@ -271,7 +287,7 @@ class UserModel extends ConnectedProductsModel {
       message = 'Authentication succeeded';
     } else if (responseData['error']['message'] == 'EMAIL_EXISTS') {
       message = 'This email already exists';
-    }else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
+    } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
       message = 'This email is not found';
     } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
       message = 'The password is invalid';

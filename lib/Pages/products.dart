@@ -18,7 +18,7 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   initState() {
-    widget.model.fetchProducts();
+    widget.model.fetchProducts(context);
     super.initState();
   }
 
@@ -50,7 +50,7 @@ class _ProductsPageState extends State<ProductsPage> {
         content = Center(child: CircularProgressIndicator());
       }
       return RefreshIndicator(
-        onRefresh: model.fetchProducts,
+        onRefresh: () => model.fetchProducts(context),
         child: content,
       );
     });
