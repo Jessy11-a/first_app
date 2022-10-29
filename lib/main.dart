@@ -40,12 +40,13 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.blueGrey,
               accentColor: Colors.deepPurple,
             ),
-            home: AuthPage(),
+            // home: AuthPage(),
             routes: {
-              '/':(context) => ScopedModelDescendant (
-                builder: ((BuildContext context,Widget? child,MainModel model) {
-                  return model.user == null ? AuthPage() : ProductsPage(model);
-                } )),
+              '/':(BuildContext context) => ScopedModelDescendant (
+                builder: (BuildContext context,Widget? child,MainModel model) {
+                  return model.user == null ? AuthPage() : ProductsPage(_model);
+                },
+                ),
               '/products': (BuildContext context) => ProductsPage(_model),
               '/admin': (BuildContext context) => AdminProducts(_model),
             },
