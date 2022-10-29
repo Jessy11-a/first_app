@@ -254,8 +254,8 @@ class ProductModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
-  User get user {
-    return _authenticatedUser!;
+  User? get user {
+    return _authenticatedUser;
   }
 
   Future<Map<String, dynamic>> authenticate(String email, String password,
